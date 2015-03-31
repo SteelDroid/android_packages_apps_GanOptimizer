@@ -26,20 +26,20 @@ import android.util.Log;
 public class GanOptimizer extends Service {
 
     static final String TAG = "GanOptimizer";
-    
+
     static final int NOTIFICATION_ID = 1;
-    
+
     WifiManager.WifiLock lock;
-    
+
     @Override
     public void onCreate() {
         Log.v(TAG, "Setting wifi high performance mode");
-        
+
         final WifiManager wm = (WifiManager) getSystemService(WIFI_SERVICE);
         lock = wm.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "GanOptimizer");
         lock.setReferenceCounted(false);
         lock.acquire();
-        
+
         // Keep the app from dying
         Notification n = new Notification();
         n.defaults = 0;
@@ -55,16 +55,16 @@ public class GanOptimizer extends Service {
         );
         startForeground(NOTIFICATION_ID, n);
     }
-    
+
     @Override
     public void onDestroy() {
         Log.v(TAG, "Releasing wifi high performance mode");
-        
+
         lock.release();
         lock = null;
         stopForeground(true);
     }
-    
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
